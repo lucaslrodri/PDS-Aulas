@@ -34,6 +34,15 @@ Link do grupo: \
   text(size: 1.35em)[Código da turma: *3xiikhzd*], figure(image("assets/codigo-da-turma.png", width: 95%)),
 )
 
+=== Github (Aulas e materiais)
+#figure(image("./assets/github-printscreen.png", height: 60%))
+
+#note-box(color: colors.safe)[#icon-inline(
+    "link",
+    color: luma(100),
+  ) #safe[https://github.com/lucaslrodri/PDS-Aulas.git]
+]
+
 == Ementa oficial
 
 #block(height: 75%)[
