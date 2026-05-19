@@ -15,9 +15,9 @@
     Capacitar o aluno para desenvolver sistemas de processamento de sinais digitais e realizar sua implementação em dispositivos dedicados.
   ],
   specific-objectives: (
-    [Realizar aplicações envolvendo análise espectral e filtragem digital.],
-    [Realizar amostragem e reconstrução de sinais.],
-    [Desenvolver algoritmos para processamento digital de sinais.],
+    [Realizar aplicações envolvendo análise espectral e filtragem digital;],
+    [Realizar amostragem e reconstrução de sinais;],
+    [Desenvolver algoritmos para processamento digital de sinais;],
     [Realizar o projeto de filtros Digitais IIR e FIR.],
   ),
   program-content: (
@@ -25,20 +25,20 @@
       title: "Sinais de tempo discreto",
       meetings: 4,
       topics: [
-        - Sinais discretos
-        - Propriedades e operações com Sinais Discretos
-        - Sinais elementares
-        - Propriedades de Sinais Discretos
+        - Sinais discretos;
+        - Propriedades e operações com Sinais Discretos;
+        - Sinais elementares;
+        - Propriedades de Sinais Discretos.
       ],
     ),
     (
       title: "Sistemas de tempo discreto",
       meetings: 4,
       topics: [
-        - Sistemas discretos
-        - Propriedades e operações com sistemas discretos
-        - Sistemas Lineares e Invariantes no Tempo (SLIT)
-        - Propriedades de SLIT
+        - Sistemas discretos;
+        - Propriedades e operações com sistemas discretos;
+        - Sistemas Lineares e Invariantes no Tempo (SLIT);
+        - Propriedades de SLIT.
       ],
     ),
     (
@@ -51,31 +51,31 @@
       title: "Transformada de Fourier de tempo discreto (DFT)",
       meetings: 4,
       topics: [
-        - Resposta no domínio da frequência
-        - Transformada de Fourier de Tempo Discreto (DFT)
-        - Propriedades da DFT
-        - Implementação da DFT e Transformada Rápida de Fourier (FFT)
-        - Aplicações da DFT
+        - Resposta no domínio da frequência;
+        - Transformada de Fourier de Tempo Discreto (DFT);
+        - Propriedades da DFT;
+        - Implementação da DFT e Transformada Rápida de Fourier (FFT);
+        - Aplicações da DFT.
       ],
     ),
     (
       title: "Série de Fourier de tempo discreto",
       meetings: 4,
       topics: [
-        - Série de Fourier de Tempo Discreto
-        - Propriedades da Série de Fourier de Tempo Discreto
-        - Relação entre a DFT e a Série de Fourier de Tempo Discreto
+        - Série de Fourier de Tempo Discreto;
+        - Propriedades da Série de Fourier de Tempo Discreto;
+        - Relação entre a DFT e a Série de Fourier de Tempo Discreto.
       ],
     ),
     (
       title: "Transformada Z",
       meetings: 4,
       topics: [
-        - Definição de transformada Z
-        - Propriedades da transformada Z
-        - Relação entre a DFT e a transformada Z
-        - Transformada unilateral e bilateral
-        - Aplicações da transformada Z
+        - Definição de transformada Z;
+        - Propriedades da transformada Z;
+        - Relação entre a DFT e a transformada Z;
+        - Transformada unilateral e bilateral;
+        - Aplicações da transformada Z.
       ],
     ),
     (
@@ -84,34 +84,34 @@
       isTopic: false,
     ),
     (
-      title: "Amostragem",
+      title: "Amostragem e reconstrução de sinais",
       meetings: 4,
       topics: [
-        - Definição de amostragem
-        - _Aliasing_ e Teorema de amostragem de Nyquist-Shannon
-        - Taxa de amostragem e quantização (Relacionada à amostragem)
-        - Reconstrução de sinais a partir de amostras
-        - Superamostragem e subamostragem
-        - Aplicações da amostragem
+        - Definição de amostragem;
+        - _Aliasing_ e Teorema de amostragem de Nyquist-Shannon;
+        - Taxa de amostragem e quantização (Relacionada à amostragem);
+        - Reconstrução de sinais a partir de amostras;
+        - Superamostragem e subamostragem;
+        - Aplicações da amostragem.
       ],
     ),
     (
       title: "Filtros digitais FIR",
       meetings: 4,
       topics: [
-        - Definição e classificação de filtros digitais
-        - Janelamento de filtros FIR
-        - Implementação e aplicação de filtros digitais FIR
+        - Definição e classificação de filtros digitais;
+        - Janelamento de filtros FIR;
+        - Implementação e aplicação de filtros digitais FIR.
       ],
     ),
     (
       title: "Filtros digitais IIR",
       meetings: 4,
       topics: [
-        - Filtros analógicos (Butterworth, Chebyshev, Elíptico)
-        - Conversão de filtros analógicos para digitais
-        - Implementação e aplicação de filtros digitais IIR
-        - Comparação entre filtros FIR e IIR
+        - Filtros analógicos (Butterworth, Chebyshev, Elíptico);
+        - Conversão de filtros analógicos para digitais;
+        - Implementação e aplicação de filtros digitais IIR;
+        - Comparação entre filtros FIR e IIR.
       ],
     ),
     (
@@ -127,15 +127,17 @@
   ),
   assignments: [
     As avaliações das disciplinas serão compostas por:
-    - 3 provas escritas ($P_i$ com $i in {1, 2, 3}$)
-    - 3 Listas de exercícios ($L_i$ com $i in {1, 2, 3}$, uma para cada prova)
-    - 1 trabalho final ($T$)
+    - 3 provas escritas ($P_i$ com $i in {1, 2, 3}$);
+    - 3 Listas de exercícios ($L_i$ com $i in {1, 2, 3}$, uma para cada prova);
+    - 1 trabalho final ($T$).
 
     Cada prova e cada lista irá compor uma nota parcial dada por:
 
     $
       A_i = "0,8" dot P_i + "0,2" dot L_i
     $
+
+    Sendo $i in {1, 2, 3}$.
 
     A nota parcial, $N_1$, será dada por:
 
@@ -161,6 +163,8 @@
     + CHEN, C. T., “Digital Signal Processing – Spectral computation and filter design”, Oxford University Press, 2001.
     + PROAKIS J. G., MANOLAKIS D. G., “Digital signal processing - principles, algorithms and applications”, Prentice Hall, 1996.
     + SCHILLING, Robert J.; HARRIS, Sandra L. Digital signal processing using MATLAB. Cengage Learning, 2016.
+
+    #v(2em)
   ],
   complementary-bibliography: [
     + ALKIN, O., “Digital Signal Processing: A Laboratory Approach Using DSP”, Prentice Hall, 1994.
