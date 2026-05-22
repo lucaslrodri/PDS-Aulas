@@ -59,7 +59,6 @@ Link do grupo: \
     - Sistemas FIR e IIR;
     - Projeto de filtros digitais tipo FIR e IIR;
     - Análise de sistemas de tempo discreto;
-    - *Diagrama de blocos* de diagrama de fluxo;
   ]
 ]
 
@@ -248,7 +247,7 @@ As avaliações das disciplinas serão compostas por:
 Cada prova e cada lista irá compor uma nota parcial dada por:
 
 $
-  A_i = "0,8" dot P_i + "0,2" dot L_i
+  A_i = "0,7" dot P_i + "0,3" dot L_i
 $
 
 Sendo $i in {1, 2, 3}$.

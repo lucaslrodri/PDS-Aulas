@@ -9,6 +9,17 @@ main = "file:pds-parte-1/pds-parte-1.typ"
 root = "file:."
 system-fonts = true
 
+[[document]]
+id = "file:plano-de-aula/pds-plano-de-aula-2026.typ"
+inputs = []
+main = "file:plano-de-aula/pds-plano-de-aula-2026.typ"
+root = "file:."
+system-fonts = true
+
+[[route]]
+id = "file:plano-de-aula/pds-plano-de-aula-2026.typ"
+priority = 256
+
 [[route]]
 id = "file:pds-parte-1/pds-parte-1.typ"
 priority = 256
