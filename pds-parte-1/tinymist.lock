@@ -3,6 +3,13 @@
 version = "0.1.0-beta0"
 
 [[document]]
+id = "file:pds-parte-1.typ"
+inputs = []
+main = "file:pds-parte-1.typ"
+root = "file:."
+system-fonts = true
+
+[[document]]
 id = "file:pds-parte-1/pds-parte-1.typ"
 inputs = []
 main = "file:pds-parte-1/pds-parte-1.typ"
@@ -22,4 +29,8 @@ priority = 256
 
 [[route]]
 id = "file:pds-parte-1/pds-parte-1.typ"
+priority = 256
+
+[[route]]
+id = "file:pds-parte-1.typ"
 priority = 256
