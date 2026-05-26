@@ -1,5 +1,6 @@
 #import "@local/ufac-syllabus:0.0.1": *
 
+
 #show: ufac-syllabus.with(
   instructor: "Lucas L. Rodrigues / Omar A. C. Vilcanqui",
   semester: (2026, 1),
