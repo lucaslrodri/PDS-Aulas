@@ -1,5 +1,7 @@
 #import "@preview/touying:0.7.3": *
 #import "@local/touying-ufac:0.0.1": *
+#import "@preview/lilaq:0.6.0" as lq
+
 
 #show: ufac-theme.with(aspect-ratio: "16-9", progress-bar: false, config-info(
   title: [Introdução aos sistemas de controle],
@@ -589,6 +591,11 @@ e assim por diante.
 - A amplitude de uma sequência é o valor de cada amostra;
 - Modificar a amplitude = multiplicar a sequência por um escalar;
 
+#figure(  
+  image("assets/mudanca-escala-amplitude.png", width: 60%),
+  caption: [Multiplicação por um escalar.]
+)
+
 === Operação:
 
 $
@@ -667,3 +674,318 @@ Reflete o sinal em torno do eixo das ordenadas ($n=0$)
   #figure(image("assets/compressao-temporal-sinal-comprimido-ex-2.png"), caption: [Sinal comprimido])
   ]
 ]
+
+== Deslocamento no tempo
+
+#side-by-side[
+=== Operação:
+
+$
+  y[n] = x[n - k], k in bb(Z)
+$
+
+=== Efeito:
+
+- $k > 0$ $->$ atraso: Desloca as amostras à *direita*;
+- $k < 0$ $->$ avanço: Desloca as amostras à *esquerda*.
+
+][#figure(image("assets/deslocamento-temporal-esquerda.png", width: 80%), caption: [Deslocamento a esquerda no gráfico de sequëncia])]
+
+=== Implementação:
+
+- Usando em sistemas digitais via memórias.
+- Cada atraso é uma unidade em memória.
+
+#example-slide(source: [Implementação de um atraso unitário])[
+```c
+int previous_temp = 0; // Registrador de memória do atraso unitário (Z^-1)
+// aqui vai um código aleatório
+// Declaração da função do atraso unitário
+int processUnitDelay(int current_temp) {
+  // 1. Pega o valor armazenado no ciclo anterior
+  int output = previous_temp;
+  
+  // 2. Atualiza a memória com o valor mais recente
+  previous_temp = current_temp;
+  
+  // 3. Retorna a amostra atrasada
+  return output; 
+}
+```
+
+=== Solução em hardware:
+
+#quote-box[
+  https://www.tinkercad.com/things/cHqhEMUTZmc-unit-delay-pds
+]
+]
+
+#example-slide(source: [Diferença de sinais])[
+  Um sinal discreto é dado por:
+  $
+    x[n] = cases(
+      1", se" n = -1 "e" n = 1,
+      0", se " n < 0
+    )
+  $
+
+  + Faça esbolce o gráfico de $x[n]$.
+  + Encontre $y[n] = x[n] - x[n-1]$ e esbolce gráficamente.
+
+  #pagebreak()
+
+  === Solução
+
+  #let x-fn(n) = if n == -1 or n == 1 { 1 } else { 0 }
+  #let y-fn(n) = x-fn(n) - x-fn(n - 1)
+  #let ns = range(-3, 4)
+
+  / Parte 1: Esboço de $x[n]$
+  #figure(lq.diagram(
+    xlabel: [$n$],
+    ylabel: [$x[n]$],
+    xlim: (-3.5, 3.5),
+    ylim: (-0.5, 1.5),
+    height: 6cm,
+    lq.stem(ns, ns.map(x-fn), base-stroke: black),
+  ))
+  #pagebreak()
+  / Parte 2: $y[n] = x[n] - x[n-1]$
+  
+  #side-by-side(height: auto)[
+    $
+      x[n] = cases(
+        1", se" n = -1 "e" n = 1,
+        0", se " n < 0
+      )
+    $
+    $
+      x[n - 1] = cases(
+        1", se" n = 0 "e" n = 2,
+        0", se " n < 0
+      )
+    $
+  ][
+  Logo $y[n] = x[n] - x[n-1]$:
+  #figure(lq.diagram(
+    xlabel: [$n$],
+    ylabel: [$y[n]$],
+    xlim: (-3.5, 3.5),
+    ylim: (-1.5, 1.5),
+    height: 6cm,
+    lq.stem(ns, ns.map(y-fn), base-stroke: black),
+  ))
+  ]
+]
+
+#exercise-slide()[
+Um sinal de tempo discreto $x[n]$ é definido por:
+$
+  x[n] = cases(
+    1 ", se" n=1","2,
+    -1 ", se" n=-1","-2,
+    0 ", se" n = 0 "ou" |n| > 2 
+  )
+$
+
++ Esboce o gráfico de $x[n]$.
++ Encontre $y[n] = x[2 n + 3]$ e esboce graficamente.
+
+]
+
+== Diferenças e acumulação
+
+=== Diferença: 
+Análoga à derivada.
+
+$
+  (d x_c (t))/(d t) approx (Delta x_c (t))/(Delta t) 
+$
+
+$
+  (d x_c (t))/(d t) approx 1/T_a (x[n] - x[n-1])
+$
+
+A *primeira diferença* é dada por:
+
+$
+  Delta x[n] = x[n] - x[n-1]
+$
+=== Acumulação: 
+Análoga à integral.
+
+$
+  y[n] = sum_(k=-infinity)^(n) x[k]
+$
+
+---
+
+=== Relação entre diferença e acumulação
+
+#quote-box[
+  São operações inversas entre si.
+]
+
+Aplicando a primeira diferença na acumulação, temos:
+
+$
+  Delta y[n] = y[n] - y[n-1] = sum_(k=-infinity)^n x[n] - sum_(k=-infinity)^(n-1) x[n] = x[n]
+$
+
+---
+
+Da mesma forma, calculando a acumulação da primeira diferença, temos:
+
+$
+  sum_(k=-infinity)^n Delta x[k] = sum_(k=-infinity)^n (x[k] - x[k-1]) \
+  = sum_(k=-infinity)^n x[k] - sum_(k=-infinity)^n x[k-1] \
+  = sum_(k=-infinity)^n x[k] - sum_(k=-infinity)^(n-1) x[k] \
+  = x[n]
+$
+
+#exercise-slide(source: [Acumulador])[
+  Implemente um acumulador no TinkerCad usando a lógica do Arduino. Siga como base o exemplo de código dado no exercício de delay unitário.
+]
+
+== Partes real e imaginária
+
+Uma sequência complexa pode ser decomposta por:
+
+$
+  x[n] = x_R [n] + j x_I [n]
+$
+
+Onde:
+
+#bullet-list[
+  #set list(indent: 1em)
+  - Parte real: $Re(x[n]) = x_R[n]$
+  - Parte imaginária: $Im(x[n]) = x_I[n]$
+]
+Usando o operador de *complexo conjugado*, temos:
+
+$
+  x^* [n] = x_R [n] - j x_I [n]
+$
+
+#columns(2)[
+  $
+    x_R [n] = (x[n] + x^* [n])/2
+  $
+  #colbreak()
+  $
+    x_I [n] = (x[n] - x^* [n])/(2j)
+  $
+]
+
+== Paridade e simetria conjugada
+
+#quote-box(color: colors.safe)[
+/ Sequência par: $x[n] = x[-n]$ (Simetria par)
+]
+
+#quote-box(color: colors.danger)[
+/ Sequência ímpar: $x[n] = -x[-n]$ (Simetria ímpar)
+]
+
+
+
+#fancy-box(title: [Considerações])[
+  Uma sequência pode ser
+  - Par, Ímpar ou nenhuma das duas;
+  - #danger[Nunca] par e ímpar ao mesmo tempo, exceto se for a sequência nula.
+]
+
+---
+
+=== Decomposição
+
+Pode-se decompor uma sequência em partes par e ímpar:
+
+$
+  x[n] = x_e [n] + x_o [n]
+$
+
+Onde:
+#columns(2)[
+  $
+    x_e [n] = (x[n] + x[-n])/2
+  $
+  #colbreak()
+  $
+    x_o [n] = (x[n] - x[-n])/2
+  $
+]
+
+E:
+- $x_e [n]$ é a parte *par* (_even_) de $x[n]$;
+- $x_o [n]$ é a parte *ímpar* (_odd_) de $x[n]$.
+
+#example-slide(source: [Exemplo de decomposição em partes par e ímpar])[
+Determine se a seguinte sequência é par, ímpar ou nenhuma das duas:
+
+$
+  x[n] = n^2
+$
+
+=== Solução
+
+/ Passo 1: Calculando $x[-n]$:
+$
+  x[-n] = (-n)^2 = n^2
+$
+
+#pagebreak()
+
+/ Passo 2: Decompondo em partes par e ímpar:
+Para a parte par:
+$
+  x_e [n] = (x[n] + x[-n])/2 = (n^2 + n^2)/2 = n^2
+$
+Para a parte impar:
+$
+  x_o [n] = (x[n] - x[-n])/2 = (n^2 - n^2)/2 = 0
+$
+Logo o sinal é par.
+]
+
+#exercise-slide()[
+  Verifique se as sequências abaixo são pares, ímpares ou nenhuma das duas. Decomponha cada sequência em partes par e ímpar.
+
+  + $x[n] = n^3$
+  + $x[n] = n + 1$
+
+
+  #pagebreak()
+  === Resposta
+  + $x[n] = n^3$
+
+  #columns(2)[
+    Parte par:
+    $
+      x_e [n] = 0
+    $
+    #colbreak()
+    Parte ímpar:
+    $
+      x_o [n] = n^3
+    $
+  ]
+  Logo o sinal é ímpar.
+
+  + $x[n] = n + 1$
+  #columns(2)[
+    Parte par:
+    $
+      x_e [n] = 1
+    $
+    #colbreak()
+    Parte ímpar:
+    $
+      x_o [n] = n
+    $
+  ]
+  Logo o sinal é nenhuma das duas.
+]
+
+= Perioticidade de sinais discretos
