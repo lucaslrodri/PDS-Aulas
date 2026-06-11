@@ -1394,3 +1394,192 @@ $
   + $x[n] = cos(pi/3 n) + sin(pi/5 n)$
   + $x[n] = cos^2(pi/8 n)$
 ]
+
+= Sinais de potência e sinais de energia
+
+== Caso contínuo
+
+Num circuito elétrico com uma só resistência, $R$, a potência instantânea $p(t)$ é dada por:
+
+#grid(columns: (1fr, 1fr), align: (left + horizon, right + horizon))[
+$
+  p(t) = R i(t)^2 = v(t)i(t) = 1/ R v(t)^2
+$
+][
+#figure(image("assets/potencia-resistor.png", height: 6em))
+]
+
+E a energia dissipada na resistência, $E$, é dada por:
+
+$
+  E(t_1, t_2) = integral_(t_1)^(t_2) p(t) d t = integral_(t_1)^(t_2) R i(t)^2 d t = integral_(t_1)^(t_2) 1/R v(t)^2 d t
+$
+
+---
+
+A potência média dissipada no mesmo intervalo de tempo é dada por:
+
+$
+  P(t_1, t_2) = (1/(t_2 - t_1)) E(t_1, t_2)
+$
+
+$
+  P(t_1, t_2) = (1/(t_2 - t_1)) integral_(t_1)^(t_2) p(t) d t = (1/(t_2 - t_1)) integral_(t_1)^(t_2) 1/R v(t)^2 d t
+$
+
+== Generalizando o caso contínuo
+
+=== Potência instantânea
+
+A potência instantânea de um sinal contínuo $x_c (t)$ é dada por:
+
+$
+  p(t) = x_c (t)^2
+$
+
+---
+
+=== Energia no intervalo $t in [t_1, t_2]$:
+
+A Energia sobre o mesmo sinal $x_c (t)$ no intervalo $t in [t_1, t_2]$ é dada por:
+
+$
+  E(t_1, t_2) = integral_(t_1)^(t_2) x_c (t)^2 d t
+$
+
+=== Potência média no intervalo $t in [t_1, t_2]$:
+
+E a potëncia média é dada por:
+
+$
+  P(t_1, t_2) = (1/(t_2 - t_1)) integral_(t_1)^(t_2) x_c (t)^2 d t
+$
+
+== Caso discreto
+
+=== Potência instantânea
+
+A potência instantânea de um sinal discreto $x[n]$ é dada por:
+
+$
+  p[n] = x[n]^2
+$
+
+---
+
+=== Energia no intervalo $n in [n_1, n_2]$:
+
+A energia é dada por:
+
+$
+  E[n_1, n_2] = sum_(n=n_1)^(n_2) x[n]^2
+$
+
+=== Potência média no intervalo $n in [n_1, n_2]$:
+
+A potência média é dada por:
+
+$
+  P[n_1, n_2] = (1/(n_2 - n_1 + 1)) sum_(n=n_1)^(n_2) x[n]^2
+$
+
+
+== Caso discreto (Extensão infinita)
+
+#quote-box[
+  Consideramos $n in (-infinity, infinity)$
+]
+
+#side-by-side(height: 12em)[
+=== Energia total
+$
+  E_infinity = lim_(N->infinity) sum_(n=-N)^(N) x[n]^2
+$
+][
+=== Potência média
+$
+  P_infinity = lim_(N->infinity) (1/(2N+1)) sum_(n=-N)^(N) x[n]^2
+$
+]
+
+== Classificação de sinais quanto a potência e energia
+
+Define-se 3 classes:
+#bullet-list[
+  #set list(indent: 1em)
+  - Sinais de energia finita;
+  - Sinais de potência média finita;
+  - Sinais de potência média infinita.
+]
+---
+=== Sinal de Energia finita
+
+Quando:
+
+$
+  E_infinity = lim_(N->infinity) sum_(n=-N)^(N) x[n]^2 < infinity
+$
+
+#quote-box[
+  Isto é, quando a série é *convergente*.
+]
+
+Neste caso:
+- A energia toma valores finitos ($E_infinity < infinity$);
+- E a potëncia média é nula ($P_infinity = 0$).
+
+---
+
+=== Sinal de potência média finita
+
+Quando:
+
+$
+  P_infinity = lim_(N->infinity) (1/(2N+1)) sum_(n=-N)^(N) x[n]^2 < infinity
+$
+
+Neste caso:
+- A potência média toma valores finitos ($P_infinity < infinity$);
+- E a energia é infinita ($E_infinity = infinity$).
+
+---
+
+=== Sinal de potência e energia infinita
+
+Sinais cuja a energia e potência média, num intervalo infinito, são ambas infinitos:
+
+$
+  E_infinity -> infinity, quad P_infinity -> infinity
+$
+
+#example-slide(source: [Sinais de potência e energia])[
+  Calcule $E_infinity$ e $P_infinity$ para o sinal discreto $x[n] = 4$.
+  
+  === Solução
+
+  / Relembrando:
+
+  #side-by-side(height: 10em)[
+  $
+    sum_(n=n_1)^(n_2) c = c (n_2 - n_1 + 1)
+  $
+  ][
+  $
+    sum_(n=-N)^(N) c = c (2N + 1)
+  $
+  ]
+  #pagebreak()
+
+  / Cálculo de $E_infinity$:
+
+$
+  E_infinity = lim_(N->infinity) sum_(n=-N)^(N) 4^2 = lim_(N->infinity) sum_(n=-N)^(N) 16 = lim_(N->infinity) 16 (2N +  1) = infinity
+$
+
+/ Cálculo de $P_infinity$:
+  $
+    P_infinity &= lim_(N->infinity) (1/(2N+1)) sum_(n=-N)^(N) 4^2 \ 
+    &= lim_(N->infinity) (1/(2N+1)) sum_(n=-N)^(N) 16 \
+    &= lim_(N->infinity) (1/(2N+1)) 16 (2N +  1) = 16
+  $
+]
