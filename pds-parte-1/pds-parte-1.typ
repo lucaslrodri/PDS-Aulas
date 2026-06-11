@@ -1150,7 +1150,7 @@ E:
 
   + $x[n] = 2^n$
   + $x[n] = (-2)^n$
-  + $x[n] = e^{j omega n}$
+  + $x[n] = e^(j omega n)$
   + $x[n] = n^2 mod 3$
 
   #pagebreak()
@@ -1163,7 +1163,7 @@ E:
     table.header([Sinal], [Classificação], [$x_e [n]$], [$x_o [n]$]),
     [$2^n$], [nenhuma], [$(2^n + 2^(-n))/2$], [$(2^n - 2^(-n))/2$],
     [$(-2)^n$], [nenhuma], [$(-1)^n (2^n + 2^(-n))/2$], [$(-1)^n (2^n - 2^(-n))/2$],
-    [$e^{j omega n}$], [nenhuma], [$cos(omega n)$], [$j sin(omega n)$],
+    [$e^(j omega n)$], [nenhuma], [$cos(omega n)$], [$j sin(omega n)$],
     [$n^2 mod 3$], [*par*], [$n^2 mod 3$], [$0$],
   )
 ]
@@ -1393,6 +1393,19 @@ $
   + $x[n] = cos((3 pi)/4 n + pi/8)$
   + $x[n] = cos(pi/3 n) + sin(pi/5 n)$
   + $x[n] = cos^2(pi/8 n)$
+
+  #pagebreak()
+
+  === Solução
+
+  + $x[n] = cos(n)$, não periódico
+  + $x[n] = cos(pi n)$, periódico com período fundamental $N_0 = 2$
+  + $x[n] = n mod 3$, periódico com período fundamental $N_0 = 3$
+  + $x[n] = cos((3 pi)/4 n + pi/8)$, periódico com período fundamental $N_0 = 8$
+  + $x[n] = cos(pi/3 n) + sin(pi/5 n)$, periódico com período fundamental $N_0 = 30$
+  + $x[n] = cos^2(pi/8 n)$, periódico com período fundamental $N_0 = 16$
+
+
 ]
 
 = Sinais de potência e sinais de energia
