@@ -805,7 +805,7 @@ $
   x[n] -> x[alpha n + beta]
 $
 
-=== Analisando o efeito de $alpha$ 
+=== Analisando o efeito de $alpha$
 
 - Se $|alpha| > 1$, tem-se uma *compressão* linear;
 - Se $|alpha| < 1$, tem-se uma *dilatação* linear;
@@ -1110,8 +1110,8 @@ E:
   //     -1/2 \, & n < 0
   //   )
   // $
-  
-  $    
+
+  $
     x_e [n] = cases(
       1 \, & n = 0,
       1/2 \, & n != 0
@@ -1187,7 +1187,9 @@ $
 
 #quote-box(color: colors.safe)[Sequências periódicas são fundamentais no estudo de sinais digitais;]
 #quote-box(color: colors.primary)[Suas propriedades influenciam diretamente o *projeto de sistemas digitais*;]
-#quote-box(color: colors.danger)[Análise de perioticidade é a base para #danger[filtragem, compressão e transmissão de sinais];]
+#quote-box(
+  color: colors.danger,
+)[Análise de perioticidade é a base para #danger[filtragem, compressão e transmissão de sinais];]
 
 
 == Período fundamental
@@ -1237,17 +1239,17 @@ $
   é periódico.
 
   === Solução
-  
+
 
   Substituindo $n = n + N$ na expressão do sinal, temos:
   $
     x[n + N] = sin(pi/4 (n + N)) = sin(pi/4 n + pi/4 N)
   $
 
-  Sabemos que a função seno é periódica com o período $2 pi$. 
+  Sabemos que a função seno é periódica com o período $2 pi$.
 
   #pagebreak()
-  
+
   Logo, para que $x[n]$ seja periódico, é necessário que:
 
   $
@@ -1306,7 +1308,7 @@ $
   Encontre o período fundamental de $y[n] = x_1 [n] + x_2 [n]$.
 
   #pagebreak()
-  
+
   === Solução
 
   ===== Período fundamental de $x_1[n]$:
@@ -1345,40 +1347,40 @@ $
 
 
   #columns(3)[
-  #figure(
-    lq.diagram(
-      xlabel: [$n$],
-      ylabel: [$x_1[n]$],
-      xlim: (-10.5, 10.5),
-      ylim: (-1.5, 1.5),
-      height: 3cm,
-      lq.stem(ns-plot, ns-plot.map(x1-fn), base-stroke: black),
+    #figure(
+      lq.diagram(
+        xlabel: [$n$],
+        ylabel: [$x_1[n]$],
+        xlim: (-10.5, 10.5),
+        ylim: (-1.5, 1.5),
+        height: 3cm,
+        lq.stem(ns-plot, ns-plot.map(x1-fn), base-stroke: black),
+      ),
     )
-  )
-  #colbreak()
+    #colbreak()
 
-  #figure(
-    lq.diagram(
-      xlabel: [$n$],
-      ylabel: [$x_2[n]$],
-      xlim: (-10.5, 10.5),
-      ylim: (-1.5, 1.5),
-      height: 3cm,
-      lq.stem(ns-plot, ns-plot.map(x2-fn), base-stroke: black),
+    #figure(
+      lq.diagram(
+        xlabel: [$n$],
+        ylabel: [$x_2[n]$],
+        xlim: (-10.5, 10.5),
+        ylim: (-1.5, 1.5),
+        height: 3cm,
+        lq.stem(ns-plot, ns-plot.map(x2-fn), base-stroke: black),
+      ),
     )
-  )
-  #colbreak()
+    #colbreak()
 
-  #figure(
-    lq.diagram(
-      xlabel: [$n$],
-      ylabel: [$y[n]$],
-      xlim: (-10.5, 10.5),
-      ylim: (-2.5, 2.5),
-      height: 3cm,
-      lq.stem(ns-plot, ns-plot.map(y-fn), base-stroke: black),
+    #figure(
+      lq.diagram(
+        xlabel: [$n$],
+        ylabel: [$y[n]$],
+        xlim: (-10.5, 10.5),
+        ylim: (-2.5, 2.5),
+        height: 3cm,
+        lq.stem(ns-plot, ns-plot.map(y-fn), base-stroke: black),
+      ),
     )
-  )
 
   ]
 
@@ -1415,11 +1417,11 @@ $
 Num circuito elétrico com uma só resistência, $R$, a potência instantânea $p(t)$ é dada por:
 
 #grid(columns: (1fr, 1fr), align: (left + horizon, right + horizon))[
-$
-  p(t) = R i(t)^2 = v(t)i(t) = 1/ R v(t)^2
-$
+  $
+    p(t) = R i(t)^2 = v(t)i(t) = 1/ R v(t)^2
+  $
 ][
-#figure(image("assets/potencia-resistor.png", height: 6em))
+  #figure(image("assets/potencia-resistor.png", height: 6em))
 ]
 
 E a energia dissipada na resistência, $E$, é dada por:
@@ -1504,15 +1506,15 @@ $
 ]
 
 #side-by-side(height: 12em)[
-=== Energia total
-$
-  E_infinity = lim_(N->infinity) sum_(n=-N)^(N) x[n]^2
-$
+  === Energia total
+  $
+    E_infinity = lim_(N->infinity) sum_(n=-N)^(N) x[n]^2
+  $
 ][
-=== Potência média
-$
-  P_infinity = lim_(N->infinity) (1/(2N+1)) sum_(n=-N)^(N) x[n]^2
-$
+  === Potência média
+  $
+    P_infinity = lim_(N->infinity) (1/(2N+1)) sum_(n=-N)^(N) x[n]^2
+  $
 ]
 
 == Classificação de sinais quanto a potência e energia
@@ -1567,32 +1569,716 @@ $
 
 #example-slide(source: [Sinais de potência e energia])[
   Calcule $E_infinity$ e $P_infinity$ para o sinal discreto $x[n] = 4$.
-  
+
   === Solução
 
   / Relembrando:
 
   #side-by-side(height: 10em)[
-  $
-    sum_(n=n_1)^(n_2) c = c (n_2 - n_1 + 1)
-  $
+    $
+      sum_(n=n_1)^(n_2) c = c (n_2 - n_1 + 1)
+    $
   ][
-  $
-    sum_(n=-N)^(N) c = c (2N + 1)
-  $
+    $
+      sum_(n=-N)^(N) c = c (2N + 1)
+    $
   ]
   #pagebreak()
 
   / Cálculo de $E_infinity$:
 
+  $
+    E_infinity = lim_(N->infinity) sum_(n=-N)^(N) 4^2 = lim_(N->infinity) sum_(n=-N)^(N) 16 = lim_(N->infinity) 16 (2N + 1) = infinity
+  $
+
+  / Cálculo de $P_infinity$:
+    $
+      P_infinity & = lim_(N->infinity) (1/(2N+1)) sum_(n=-N)^(N) 4^2 \
+                 & = lim_(N->infinity) (1/(2N+1)) sum_(n=-N)^(N) 16 \
+                 & = lim_(N->infinity) (1/(2N+1)) 16 (2N + 1) = 16
+    $
+]
+
+== Somatório de uma constante
+
 $
-  E_infinity = lim_(N->infinity) sum_(n=-N)^(N) 4^2 = lim_(N->infinity) sum_(n=-N)^(N) 16 = lim_(N->infinity) 16 (2N +  1) = infinity
+  sum_(n=n_1)^(n_2) c = c (n_2 - n_1 + 1)
 $
 
-/ Cálculo de $P_infinity$:
+#fancy-box(title: [Prova])[
+  #side-by-side(height: 8em, align: horizon)[
+    #v(1fr)
+    $
+      sum_(n=n_1)^(n_2) c = c + c + ... + c
+    $
+    #v(1fr)
+  ][
+    Temos então: ($n_2 - n_1 + 1$) vezes que o valor $c$ aparece, logo:
+
+    $
+      sum_(n=n_1)^(n_2) c = c (n_2 - n_1 + 1)
+    $
+  ]
+]
+
+== Somatório de uma sequência exponencial
+
+$
+  sum_(n=n_1)^(n_2) r^n = (1 - r^(n_2 - n_1 + 1)) / (1 - r), quad r != 1
+$
+
+#fancy-box(title: [Prova], breakable: true)[
   $
-    P_infinity &= lim_(N->infinity) (1/(2N+1)) sum_(n=-N)^(N) 4^2 \ 
-    &= lim_(N->infinity) (1/(2N+1)) sum_(n=-N)^(N) 16 \
-    &= lim_(N->infinity) (1/(2N+1)) 16 (2N +  1) = 16
+    sum_(n=n_1)^(n_2) r^n = r^(n_1) + r^(n_1 + 1) + ... + r^(n_2)
+  $
+  Multiplicando ambos os lados por $r$:
+  $
+    r sum_(n=n_1)^(n_2) r^n = r^(n_1 + 1) + r^(n_1 + 2) + ... + r^(n_2 + 1)
+  $
+  Subtraindo a segunda equação da primeira, temos:
+  $
+    (1 - r) sum_(n=n_1)^(n_2) r^n = r^(n_1) - r^(n_2 + 1)
+  $
+  Logo:
+  $
+    sum_(n=n_1)^(n_2) r^n = (1 - r^(n_2 - n_1 + 1)) / (1 - r), quad r != 1
+  $
+
+]
+
+== Somatório de uma sequência exponencial (casos especiais)
+
+=== Caso $n_1 = -infinity$ e $n_2 -> infinity$
+
+$
+  sum_(n=-infinity)^(infinity) r^n = infinity, quad |r| >= 1
+$
+
+=== Caso $n_1 = 0$ e $n_2 -> infinity$
+
+$
+  sum_(n=0)^(infinity) r^n = 1 / (1 - r), quad |r| < 1
+$
+
+---
+
+=== Caso $n_1 = 1$ e $n_2 -> infinity$
+
+$
+  sum_(n=1)^(infinity) r^n = r / (1 - r), quad |r| < 1
+$
+
+=== Caso $n_1 = 0$ e $n_2< infinity$
+
+$
+  sum_(n=0)^(n_2) r^n = (1 - r^(n_2 + 1)) / (1 - r), quad r != 1
+$
+
+---
+
+=== Caso $n_1 = 1$ e $n_2< infinity$
+
+$
+  sum_(n=1)^(n_2) r^n = (r - r^(n_2 + 1)) / (1 - r), quad r != 1
+$
+
+
+#example-slide(source: [Tirando o primeiro termo de um somatório])[
+  Calcule o somatório $sum_(n=1)^(infinity) r^n$ usando o resultado de $sum_(n=0)^(infinity) r^n$.
+
+  === Solução
+
+  / Relembrando:
+
+  $
+    sum_(n=0)^(infinity) r^n = 1 / (1 - r), quad |r| < 1
+  $
+
+  / Calculando $sum_(n=1)^(infinity) r^n$:
+
+  $
+    sum_(n=1)^(infinity) r^n = sum_(n=0)^(infinity) r^n - r^0 = (1 / (1 - r)) - 1 = r / (1 - r), quad |r| < 1
   $
 ]
+
+#example-slide(source: [Mudança de variável em um somatório])[
+  Calcule o somatório $sum_(n=-infinity)^(infinity) r^n$ usando o resultado de $sum_(n=0)^(infinity) r^n$.
+
+  === Solução
+
+  / Relembrando:
+
+  $
+    sum_(n=0)^(infinity) r^n = 1 / (1 - r), quad |r| < 1
+  $
+
+  / Calculando $sum_(n=-infinity)^(infinity) r^n$:
+
+  $
+    sum_(n=-infinity)^(infinity) r^n = sum_(n=-infinity)^(-1) r^n + sum_(n=0)^(infinity) r^n
+  $
+
+  #pagebreak()
+
+  Fazendo a mudança de variável $m = -n$, temos:
+
+  $
+    sum_(n=-infinity)^(-1) r^n = sum_(m=1)^(infinity) r^(-m)
+  $
+  E usando o resultado de $sum_(n=1)^(infinity) r^n$, temos:
+  $
+    sum_(m=1)^(infinity) r^(-m) = r^(-1) / (1 - r^(-1)) = 1 / (r - 1), quad |r| > 1
+  $
+  Logo:
+  $
+    sum_(n=-infinity)^(infinity) r^n = (1 / (r - 1)) + (1 / (1 - r)) = 0, quad
+    |r| > 1
+  $
+]
+
+== Somatório de uma sequência quadrática
+
+$
+  sum_(n=n_1)^(n_2) n^2 = (n_2 (n_2 + 1) (2 n_2 + 1) - (n_1 - 1) n_1 (2 n_1 - 1))
+$
+
+=== Caso $n_1 = 0$ e $n_2 = N$
+
+$
+  sum_(n=0)^(N) n^2 = 1/6 N (N + 1) (2 N + 1)
+$
+
+
+=== Caso $n_1 = 1$ e $n_2 = N$
+
+$
+  sum_(n=1)^(N) n^2 = 1/6 N (N + 1) (2 N + 1)
+$
+
+#exercise-slide()[
+  Calcule os seguintes somatórios:
+
+  + $ sum_(n=-3)^(3) 2^n $
+  + $ sum_(n=0)^(infinity) (1/3)^n $
+  + $ sum_(n=1)^(infinity) (1/2)^n $
+  + $ sum_(n=1)^(5) n^2 $
+]
+
+#example-slide(source: [Duplo somatório])[
+  Calcule o somatório:
+
+  $
+    sum_(i=1)^(n) sum_(j=1)^(n) (j^2 + i)
+  $
+
+  === Solução
+
+  / Relembrando:
+
+  $
+    sum_(n=1)^(N) n^2 = (N (N+1)(2N+1))/6
+  $
+
+  #pagebreak()
+
+  / Somando primeiro em $j$ (com $i$ constante):
+  $
+    sum_(j=1)^(n) (j^2 + i) = (n (n+1)(2n+1))/6 + n i
+  $
+
+  / Somando em $i$:
+  $
+    sum_(i=1)^(n) [(n (n+1)(2n+1))/6 + n i] = & (n^2 (n+1)(2n+1))/6 + (n^2 (n+1))/2 \
+                                            = & (n^2 (n+1)(n+2))/3
+  $
+
+  #pagebreak()
+  Logo:
+  $
+    sum_(i=1)^(n) sum_(j=1)^(n) (j^2 + i) = (n^2 (n+1)(n+2))/3
+  $
+
+]
+
+#exercise-slide(source: [Duplo somatório])[
+  Determine:
+
+  #columns(2)[
+    + $ sum_(i=1)^(2) sum_(j=1)^(3) 1/(i + j) $
+    + $ sum_(i=1)^(n) sum_(j=1)^(m) e^(i + j) quad ("para " n, m >= 1) $
+    + $ sum_(i=1)^(n) sum_(j=1)^(n) (2 i j^2 + 1) quad ("para " n >= 1) $
+    + $ sum_(i=1)^(7) sum_(j=5)^(10) (2 j - 3 i j) $
+    #colbreak()
+    + $ sum_(j=1)^(10) sum_(k=1)^(j) (2 k)/j $
+    + $ sum_(i=5)^(10) sum_(k=0)^(20) (i k - 5 k) $
+    + $ sum_(i=0)^(n) sum_(k=1)^(n) k (2^i + 1) $
+  ]
+]
+
+#example-slide(source: [Energia e potência de um sinal constante])[
+  Calcule a energia de:
+
+  $
+    x[n] = 4
+  $
+
+  === Solução
+
+  / Relembrando:
+    $
+      sum_(n=n_1)^(n_2) c = c (n_2 - n_1 + 1)
+    $
+    $
+      sum_(n=-N)^(N) c = c (2N + 1)
+    $
+    Calculando a energia total:
+
+    $
+      E_infinity = lim_(N -> infinity) sum_(n=-N)^(N) |x[n]|^2 = lim_(N -> infinity) sum_(n=-N)^(N) 16 = lim_(N -> infinity) 16 (2N + 1) = infinity
+    $
+
+    A potência média é dada por:
+    $
+      P_infinity = & lim_(N -> infinity) (1/(2N + 1)) sum_(n=-N)^(N) |x[n]|^2 \
+                 = & lim_(N -> infinity) (1/(2N + 1)) sum_(n=-N)^(N) 16 = lim_(N -> infinity) (1/(2N + 1)) 16 (2N + 1) = 16
+    $
+
+    É um sinal de potência média finita.
+]
+
+#example-slide(source: [Energia e potência de um sinal exponencial])[
+  Calcule a energia e potência média do sinal:
+
+  $
+    x[n] = (1/2)^n u[n]
+  $
+
+  === Solução
+
+  / Relembrando:
+
+  $
+    sum_(n=0)^(infinity) r^n = 1 / (1 - r), quad |r| < 1
+  $
+
+  #pagebreak()
+  Calculando a energia total:
+
+  $
+    E_infinity = lim_(N -> infinity) sum_(n=-N)^(N) |x[n]|^2 = lim_(N -> infinity) sum_(n=0)^(N) (1/4)^n = lim_(N -> infinity) (1 - (1/4)^(N + 1)) / (1 - 1/4) = 4/3
+  $
+
+  A potência média é dada por:
+  $
+    P_infinity = & lim_(N -> infinity) (1/(2N + 1)) sum_(n=-N)^(N) |x[n]|^2 \
+               = & lim_(N -> infinity) (1/(2N + 1)) sum_(n=0)^(N) (1/4)^n = lim_(N -> infinity) (1/(2N + 1)) ((1 - (1/4)^(N + 1)) / (1 - 1/4)) = 0
+  $
+
+  É um sinal de energia finita.
+  Logo, sinais de energia finita e sinais de potência média finita são classes distintas de sinais.
+]
+
+#example-slide(source: [Energia e potência de um sinal periódico])[
+
+]
+
+
+= Sinais elementares
+
+== Introdução
+
+- Vamos agora apresentar sinais básicos discretos;
+
+- Estes aparecem *frequentemente* em processamento digital de sinais;
+
+- E também serve para construir outros sinais.
+
+== Impulso unitário
+
+#side-by-side(align: horizon)[
+  O *impulso unitário* (ou amostra unitária) é definido por:
+
+  $
+    delta[n] = cases(
+      1", se " n = 0,
+      0", se " n != 0
+    )
+  $
+
+  #quote-box(color: colors.primary)[É o sinal discreto mais simples e serve de base para representar qualquer outro sinal.]
+][
+  #let d-fn(n) = if n == 0 { 1 } else { 0 }
+  #let ns = range(-4, 5)
+  #figure(lq.diagram(
+    xlabel: [$n$],
+    ylabel: [$delta[n]$],
+    xlim: (-4.5, 4.5),
+    ylim: (-0.5, 1.5),
+    height: 6cm,
+    lq.stem(ns, ns.map(d-fn), base-stroke: black),
+  ))
+]
+
+== Impulso unitário deslocado
+
+#side-by-side(align: horizon)[
+  Deslocando o impulso em $m$ amostras, obtemos um impulso centrado em $n = m$:
+
+  $
+    delta[n - m] = cases(
+      1", se " n = m,
+      0", se " n != m
+    )
+  $
+
+  No exemplo ao lado, $m = 2$.
+][
+  #let d-fn(n) = if n == 2 { 1 } else { 0 }
+  #let ns = range(-4, 5)
+  #figure(lq.diagram(
+    xlabel: [$n$],
+    ylabel: [$delta[n - 2]$],
+    xlim: (-4.5, 4.5),
+    ylim: (-0.5, 1.5),
+    height: 6cm,
+    lq.stem(ns, ns.map(d-fn), base-stroke: black),
+  ))
+]
+
+== Degrau unitário
+
+#side-by-side(align: horizon)[
+  O *degrau unitário* é definido por:
+
+  $
+    u[n] = cases(
+      1", se " n >= 0,
+      0", se " n < 0
+    )
+  $
+
+  #quote-box[Diferente do caso contínuo, no tempo discreto $u[n]$ é *bem definido* em $n = 0$, onde vale $1$.]
+][
+  #let u-fn(n) = if n >= 0 { 1 } else { 0 }
+  #let ns = range(-4, 5)
+  #figure(lq.diagram(
+    xlabel: [$n$],
+    ylabel: [$u[n]$],
+    xlim: (-4.5, 4.5),
+    ylim: (-0.5, 1.5),
+    height: 6cm,
+    lq.stem(ns, ns.map(u-fn), base-stroke: black),
+  ))
+]
+
+== Rampa unitária
+
+#side-by-side(align: horizon)[
+  A *rampa unitária* cresce linearmente para $n >= 0$:
+
+  $
+    r[n] = cases(
+      n", se " n >= 0,
+      0", se " n < 0
+    )
+  $
+
+  Pode ser escrita também como $r[n] = n thin u[n]$.
+][
+  #let r-fn(n) = if n >= 0 { n } else { 0 }
+  #let ns = range(-4, 7)
+  #figure(lq.diagram(
+    xlabel: [$n$],
+    ylabel: [$r[n]$],
+    xlim: (-4.5, 6.5),
+    ylim: (-0.5, 6.5),
+    height: 6cm,
+    lq.stem(ns, ns.map(r-fn), base-stroke: black),
+  ))
+]
+
+== Sinal exponencial real
+
+O *sinal exponencial real* é definido por:
+
+$
+  x[n] = C alpha^n, quad C, alpha in bb(R)
+$
+
+Dependendo do valor de $alpha$, o sinal apresenta comportamentos distintos:
+
+- $|alpha| > 1$: a magnitude *cresce* exponencialmente com $n$;
+- $|alpha| < 1$: a magnitude *decresce* exponencialmente com $n$;
+- $alpha > 0$: todas as amostras têm o *mesmo sinal* (o de $C$);
+- $alpha < 0$: o sinal *alterna* de sinal a cada amostra;
+- $alpha = 1$: o sinal é *constante* ($x[n] = C$);
+- $alpha = -1$: o sinal alterna entre $-C$ e $C$.
+
+---
+
+=== Casos com $alpha > 0$ (não alterna)
+
+#side-by-side(height: 11em)[
+  #let e-fn(n) = calc.pow(1.25, n)
+  #let ns = range(0, 9)
+  #figure(lq.diagram(
+    title: [$alpha > 1$ (crescente)],
+    xlabel: [$n$],
+    ylabel: [$x[n]$],
+    xlim: (-0.5, 8.5),
+    ylim: (0, 6.5),
+    height: 5.5cm,
+    lq.stem(ns, ns.map(e-fn), base-stroke: black),
+  ))
+][
+  #let e-fn(n) = calc.pow(0.75, n)
+  #let ns = range(0, 9)
+  #figure(lq.diagram(
+    title: [$0 < alpha < 1$ (decrescente)],
+    xlabel: [$n$],
+    ylabel: [$x[n]$],
+    xlim: (-0.5, 8.5),
+    ylim: (0, 1.2),
+    height: 5.5cm,
+    lq.stem(ns, ns.map(e-fn), base-stroke: black),
+  ))
+]
+
+---
+
+=== Casos com $alpha < 0$ (alterna de sinal)
+
+#side-by-side(height: 11em)[
+  $-1 < alpha < 0$ (alternado decrescente)
+  #let e-fn(n) = calc.pow(-0.75, n)
+  #let ns = range(0, 9)
+  #figure(lq.diagram(
+    xlabel: [$n$],
+    ylabel: [$x[n]$],
+    xlim: (-0.5, 8.5),
+    ylim: (-1.2, 1.2),
+    height: 5.5cm,
+    lq.stem(ns, ns.map(e-fn), base-stroke: black),
+  ))
+][
+  $alpha < -1$ (alternado crescente)
+  #let e-fn(n) = calc.pow(-1.25, n)
+  #let ns = range(0, 9)
+  #figure(lq.diagram(
+    xlabel: [$n$],
+    ylabel: [$x[n]$],
+    xlim: (-0.5, 8.5),
+    ylim: (-7, 7),
+    height: 5.5cm,
+    lq.stem(ns, ns.map(e-fn), base-stroke: black),
+  ))
+]
+
+== Sinal senoidal
+
+#side-by-side(align: horizon)[
+  A *sequência senoidal* é dada por:
+
+  $
+    x[n] = A cos(omega_0 n + theta)
+  $
+
+  - $A$: amplitude;
+  - $omega_0$: frequência (rad/amostra);
+  - $theta$: fase (rad).
+
+  #quote-box(color: colors.primary)[Ao contrário do caso contínuo, uma senoide discreta *nem sempre é periódica*.]
+][
+  #let s-fn(n) = calc.cos(2 * calc.pi * n / 12)
+  #let ns = range(0, 25)
+  #figure(lq.diagram(
+    xlabel: [$n$],
+    ylabel: [$x[n]$],
+    xlim: (-0.5, 24.5),
+    ylim: (-1.3, 1.3),
+    height: 6cm,
+    lq.stem(ns, ns.map(s-fn), base-stroke: black),
+  ), caption: [$ x[n] = cos((pi n) / 6) $ Periódico com $N = 12$.])
+]
+
+== Relação entre o impulso e o degrau
+
+O impulso pode ser obtido pela *diferença* do degrau:
+
+$
+  delta[n] = u[n] - u[n-1]
+$
+
+Reciprocamente, o degrau é a *acumulação* dos impulsos:
+
+$
+  u[n] = sum_(m=-infinity)^(n) delta[m] = sum_(k=0)^(infinity) delta[n - k]
+$
+
+#quote-box[Essas relações são o análogo discreto da derivada e da integral entre $delta(t)$ e $u(t)$ no tempo contínuo.]
+
+== Relação entre rampa, degrau e impulso
+
+#side-by-side(height: auto)[
+  #fancy-box(title: [Diferença])[
+    $ r[n] arrow.r u[n] arrow.r delta[n] $
+
+    $
+      u[n] &= r[n+1] - r[n] \
+      delta[n] &= u[n] - u[n-1]
+    $
+  ]
+][
+  #fancy-box(title: [Acumulação])[
+    $ delta[n] arrow.r u[n] arrow.r r[n] $
+
+    $
+      u[n] &= sum_(k=-infinity)^(n) delta[k] \
+      r[n] &= sum_(k=-infinity)^(n-1) u[k]
+    $
+  ]
+]
+
+A *diferença* "desce" na hierarquia (rampa $arrow.r$ degrau $arrow.r$ impulso); a *acumulação* "sobe" (impulso $arrow.r$ degrau $arrow.r$ rampa).
+
+#example-slide(source: [Construindo o degrau a partir de impulsos])[
+  Cada impulso $delta[n - k]$ coloca uma amostra de altura $1$ em $n = k$. Somando a partir de $k = 0$, construímos o degrau: $u[n] = sum_(k=0)^(infinity) delta[n - k]$.
+
+  #let ps-fn(n) = if n >= 0 and n <= 3 { 1 } else { 0 }
+  #let u-fn(n) = if n >= 0 { 1 } else { 0 }
+  #let ns = range(-3, 9)
+  #side-by-side(height: auto)[
+    #figure(lq.diagram(
+      title: [Soma parcial ($K = 3$)],
+      xlabel: [$n$],
+      ylabel: [],
+      xlim: (-3.5, 8.5),
+      ylim: (-0.5, 1.5),
+      height: 4.8cm,
+      lq.stem(ns, ns.map(ps-fn), base-stroke: black),
+    ))
+  ][
+    #figure(lq.diagram(
+      title: [$u[n]$ (quando $K -> infinity$)],
+      xlabel: [$n$],
+      ylabel: [],
+      xlim: (-3.5, 8.5),
+      ylim: (-0.5, 1.5),
+      height: 4.8cm,
+      lq.stem(ns, ns.map(u-fn), base-stroke: black),
+    ))
+  ]
+]
+
+== Mais exemplos de sinais degrau
+
+A partir do degrau, deslocamentos e reflexões geram outros sinais úteis:
+
+#side-by-side(height: auto)[
+  / Degrau atrasado $u[n - 3]$:
+  #let u-fn(n) = if n >= 3 { 1 } else { 0 }
+  #let ns = range(-3, 9)
+  #figure(lq.diagram(
+    title: [$u[n - 3]$],
+    xlabel: [$n$],
+    ylabel: [],
+    xlim: (-3.5, 8.5),
+    ylim: (-0.5, 1.5),
+    height: 5.5cm,
+    lq.stem(ns, ns.map(u-fn), base-stroke: black),
+  ))
+][
+  / Degrau refletido $u[-n]$:
+  #let u-fn(n) = if n <= 0 { 1 } else { 0 }
+  #let ns = range(-6, 6)
+  #figure(lq.diagram(
+    title: [$u[-n]$],
+    xlabel: [$n$],
+    ylabel: [],
+    xlim: (-6.5, 5.5),
+    ylim: (-0.5, 1.5),
+    height: 5.5cm,
+    lq.stem(ns, ns.map(u-fn), base-stroke: black),
+  ))
+]
+
+#example-slide(source: [Construindo sinais com degraus])[
+  / Pulso retangular:
+
+  #side-by-side(height: auto, align: horizon)[
+    A *diferença de dois degraus* produz um pulso de duração finita:
+
+    $
+      p[n] = u[n] - u[n - 5] = cases(
+        1", " 0 <= n <= 4,
+        0", c.c."
+      )
+    $
+
+    $u[n]$ "liga" o sinal em $n = 0$ e $-u[n - 5]$ o "desliga" em $n = 5$.
+  ][
+    #let p-fn(n) = if n >= 0 and n <= 4 { 1 } else { 0 }
+    #let ns = range(-3, 9)
+    #figure(lq.diagram(
+      title: [$p[n] = u[n] - u[n - 5]$],
+      xlabel: [$n$],
+      ylabel: [],
+      xlim: (-3.5, 8.5),
+      ylim: (-0.5, 1.5),
+      height: 5.5cm,
+      lq.stem(ns, ns.map(p-fn), base-stroke: black),
+    ))
+  ]
+
+  #pagebreak()
+
+  / Sinal em escada:
+
+  #side-by-side(height: auto, align: horizon)[
+    Combinando degraus escalados e deslocados, obtemos sinais constantes por partes:
+
+    $
+      x[n] = u[n] + u[n - 2] - 2 u[n - 4]
+    $
+
+    - $1$ para $0 <= n <= 1$;
+    - $2$ para $2 <= n <= 3$;
+    - $0$ caso contrário.
+  ][
+    #let x-fn(n) = (if n >= 0 { 1 } else { 0 }) + (if n >= 2 { 1 } else { 0 }) - 2 * (if n >= 4 { 1 } else { 0 })
+    #let ns = range(-2, 8)
+    #figure(lq.diagram(
+      title: [$x[n]$],
+      xlabel: [$n$],
+      ylabel: [],
+      xlim: (-2.5, 7.5),
+      ylim: (-0.5, 2.5),
+      height: 5.5cm,
+      lq.stem(ns, ns.map(x-fn), base-stroke: black),
+    ))
+  ]
+]
+
+== Propriedade de amostragem do impulso
+
+Como $delta[n]$ só é não nulo em $n = 0$, multiplicar um sinal por um impulso *seleciona uma única amostra*:
+
+$
+  x[n] delta[n] = x[0] delta[n]
+$
+
+De forma geral, para um impulso centrado em $n = n_0$:
+
+$
+  x[n] delta[n - n_0] = x[n_0] delta[n - n_0]
+$
+
+== Decomposição de um sinal em impulsos
+
+A propriedade de amostragem leva a um resultado fundamental: *qualquer sinal discreto* pode ser escrito como uma soma de impulsos deslocados, cada um ponderado pelo valor da amostra correspondente:
+
+$
+  x[n] = sum_(k=-infinity)^(infinity) x[k] delta[n - k]
+$
+
+#quote-box(color: colors.primary)[Essa decomposição é a base da *soma de convolução*, que será usada para descrever a resposta de sistemas lineares e invariantes no tempo (SLIT).]
