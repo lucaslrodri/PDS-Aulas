@@ -1599,7 +1599,7 @@ $
     $
 ]
 
-== Somatório de uma constante
+== Somatório de uma sequência constante
 
 $
   sum_(n=n_1)^(n_2) c = c (n_2 - n_1 + 1)
@@ -1623,9 +1623,15 @@ $
 
 == Somatório de uma sequência exponencial
 
-$
-  sum_(n=n_1)^(n_2) r^n = (1 - r^(n_2 - n_1 + 1)) / (1 - r), quad r != 1
-$
+  $
+    sum_(n=n_1)^(n_2) r^n = (r^(n_1) - r^(n_2 + 1))/(1 - r), quad r != 1
+  $
+
+  Ou:
+
+  $
+    sum_(n=n_1)^(n_2) r^n = (r^(n_2 + 1) - r^(n_1))/(r - 1), quad r != 1
+  $
 
 #fancy-box(title: [Prova], breakable: true)[
   $
@@ -1641,18 +1647,23 @@ $
   $
   Logo:
   $
-    sum_(n=n_1)^(n_2) r^n = (1 - r^(n_2 - n_1 + 1)) / (1 - r), quad r != 1
+    sum_(n=n_1)^(n_2) r^n = (r^(n_1) - r^(n_2 + 1))/(1 - r), quad r != 1
   $
 
+  Ou ainda:
+
+  $
+    sum_(n=n_1)^(n_2) r^n = (r^(n_2 + 1) - r^(n_1))/(r - 1), quad r != 1
+  $
 ]
 
 == Somatório de uma sequência exponencial (casos especiais)
 
-=== Caso $n_1 = -infinity$ e $n_2 -> infinity$
+// === Caso $n_1 = -infinity$ e $n_2 -> infinity$
 
-$
-  sum_(n=-infinity)^(infinity) r^n = infinity, quad |r| >= 1
-$
+// $
+//   sum_(n=-infinity)^(infinity) r^n = infinity, quad |r| >= 1
+// $
 
 === Caso $n_1 = 0$ e $n_2 -> infinity$
 
@@ -1736,23 +1747,40 @@ $
   $
 ]
 
-== Somatório de uma sequência quadrática
+== Somatório de uma sequência aritmética (Rampa)
 
 $
-  sum_(n=n_1)^(n_2) n^2 = (n_2 (n_2 + 1) (2 n_2 + 1) - (n_1 - 1) n_1 (2 n_1 - 1))
+  sum_(n=n_1)^(n_2) n = ((n_1 + n_2)(n_2 - n_1 + 1))/2
+$
+
+Isto é:
+
+$
+  S = ("Soma dos termos" dot "Número de termos") / 2
 $
 
 === Caso $n_1 = 0$ e $n_2 = N$
 
 $
+  sum_(n=0)^(N) n = (N (N + 1))/2
+$
+
+== Somatório de uma sequência quadrática
+
+$
   sum_(n=0)^(N) n^2 = 1/6 N (N + 1) (2 N + 1)
 $
 
+=== Caso geral
 
-=== Caso $n_1 = 1$ e $n_2 = N$
+Podemos definir o caso geral como:
 
 $
-  sum_(n=1)^(N) n^2 = 1/6 N (N + 1) (2 N + 1)
+  sum_(n=n_1)^(n_2) n^2 = sum_(n=0)^(n_2) n^2 - sum_(n=0)^(n_1 - 1) n^2
+$
+
+$
+  sum_(n=n_1)^(n_2) n^2 = (n_2 (n_2 + 1) (2 n_2 + 1))/6 - (n_1(n_1 - 1)(2 n_1 - 1))/6
 $
 
 #exercise-slide()[
