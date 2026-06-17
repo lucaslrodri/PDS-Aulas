@@ -2,3 +2,6 @@
 desktop.ini
 .DS_Store
 tinymist.lock
+.venv/
+site/
+__pycache__/

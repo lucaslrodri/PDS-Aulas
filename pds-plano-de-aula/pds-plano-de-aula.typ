@@ -1,131 +1,35 @@
 #import "@local/ufac-syllabus:0.0.1": *
 
+#let plano = json("../data/pds-plano.json")
+#let course = plano.at("course")
+#let bibliography = plano.at("bibliography")
+#let semester = course.at("semester")
+
+#let specific-objectives = course.at("specific-objectives").map(item => [#item])
+#let program-content = (
+  course
+    .at("program-content")
+    .map(section => (
+      title: section.at("title"),
+      meetings: section.at("meetings"),
+      isTopic: section.at("isTopic", default: true),
+      break-after: section.at("break-after", default: false),
+      topics: section.at("topics", default: ()).map(topic => [#topic]),
+    ))
+)
 
 #show: ufac-syllabus.with(
-  instructor: "Lucas L. Rodrigues / Omar A. C. Vilcanqui",
-  semester: (2026, 1),
-  subject: "Processamento Digital de Sinais",
-  subject-code: "CCET387",
-  prerequisites: ("CCET488",),
-  credits: ("4", "0", "0"),
-  subject-datetime: "13h20 – 15h00 (Terças e Quintas)",
-  syllabus: [
-    Introdução; Sinais e sistemas de tempo discreto; Representação em frequência - Transformada de Fourier de Tempo Discreto; Reposta em frequência; Sistemas FIR e IIR; Amostragem e reconstrução de sinais; Série Discreta de Fourier; Transformada Discreta de Fourier; Aplicações da DFT - Análise espectral de sinais; Transformada Z; Análise de sistemas de tempo discreto; Filtros digitais; Projeto de filtros digitais tipo FIR e IIR.
-  ],
-  main-objective: [
-    Capacitar o aluno para desenvolver sistemas de processamento de sinais digitais e realizar sua implementação em dispositivos dedicados.
-  ],
-  specific-objectives: (
-    [Realizar aplicações envolvendo análise espectral e filtragem digital;],
-    [Realizar amostragem e reconstrução de sinais;],
-    [Desenvolver algoritmos para processamento digital de sinais;],
-    [Realizar o projeto de filtros Digitais IIR e FIR.],
-  ),
-  program-content: (
-    (
-      title: "Sinais de tempo discreto",
-      meetings: 4,
-      topics: [
-        - Sinais discretos;
-        - Propriedades e operações com Sinais Discretos;
-        - Sinais elementares;
-        - Propriedades de Sinais Discretos.
-      ],
-    ),
-    (
-      title: "Sistemas de tempo discreto",
-      meetings: 4,
-      topics: [
-        - Sistemas discretos;
-        - Propriedades e operações com sistemas discretos;
-        - Sistemas Lineares e Invariantes no Tempo (SLIT);
-        - Propriedades de SLIT.
-      ],
-    ),
-    (
-      title: [$P_1$ – Prova 1],
-      meetings: 1,
-      isTopic: false,
-      break-after: true,
-    ),
-    (
-      title: "Transformada de Fourier de tempo discreto (DFT)",
-      meetings: 4,
-      topics: [
-        - Resposta no domínio da frequência;
-        - Transformada de Fourier de Tempo Discreto (DFT);
-        - Propriedades da DFT;
-        - Implementação da DFT e Transformada Rápida de Fourier (FFT);
-        - Aplicações da DFT.
-      ],
-    ),
-    (
-      title: "Série de Fourier de tempo discreto",
-      meetings: 4,
-      topics: [
-        - Série de Fourier de Tempo Discreto;
-        - Propriedades da Série de Fourier de Tempo Discreto;
-        - Relação entre a DFT e a Série de Fourier de Tempo Discreto.
-      ],
-    ),
-    (
-      title: "Transformada Z",
-      meetings: 4,
-      topics: [
-        - Definição de transformada Z;
-        - Propriedades da transformada Z;
-        - Relação entre a DFT e a transformada Z;
-        - Transformada unilateral e bilateral;
-        - Aplicações da transformada Z.
-      ],
-    ),
-    (
-      title: [$P_2$ – Prova 2],
-      meetings: 1,
-      isTopic: false,
-    ),
-    (
-      title: "Amostragem e reconstrução de sinais",
-      meetings: 4,
-      topics: [
-        - Definição de amostragem;
-        - _Aliasing_ e Teorema de amostragem de Nyquist-Shannon;
-        - Taxa de amostragem e quantização (Relacionada à amostragem);
-        - Reconstrução de sinais a partir de amostras;
-        - Superamostragem e subamostragem;
-        - Aplicações da amostragem.
-      ],
-    ),
-    (
-      title: "Filtros digitais FIR",
-      meetings: 4,
-      topics: [
-        - Definição e classificação de filtros digitais;
-        - Janelamento de filtros FIR;
-        - Implementação e aplicação de filtros digitais FIR.
-      ],
-    ),
-    (
-      title: "Filtros digitais IIR",
-      meetings: 4,
-      topics: [
-        - Filtros analógicos (Butterworth, Chebyshev, Elíptico);
-        - Conversão de filtros analógicos para digitais;
-        - Implementação e aplicação de filtros digitais IIR;
-        - Comparação entre filtros FIR e IIR.
-      ],
-    ),
-    (
-      title: [$P_3$ – Prova 3],
-      meetings: 1,
-      isTopic: false,
-    ),
-    (
-      title: [$T$ – Trabalho final],
-      meetings: 1,
-      isTopic: false,
-    ),
-  ),
+  instructor: course.at("instructor"),
+  semester: (semester.at(0), semester.at(1)),
+  subject: course.at("subject"),
+  subject-code: course.at("subject-code"),
+  prerequisites: course.at("prerequisites"),
+  credits: course.at("credits"),
+  subject-datetime: course.at("subject-datetime"),
+  syllabus: course.at("syllabus"),
+  main-objective: course.at("main-objective"),
+  specific-objectives: specific-objectives,
+  program-content: program-content,
   assignments: [
     As avaliações das disciplinas serão compostas por:
     - 3 provas escritas ($P_i$ com $i in {1, 2, 3}$);
@@ -159,21 +63,16 @@
     Caso o discente não atinja média 8,0, será realizada uma avaliação que terá o valor do exame final.
   ],
   main-bibliography: [
-    + NALON, José Alexandre. Introdução ao Processamento Digital de Sinais. Rio de Janeiro: LTC, 2009. 220 p.
-    + DINIZ, Paulo SR; DA SILVA, Eduardo AB; NETTO, Sergio L. Processamento digital de sinais-: Projeto e análise de sistemas. Bookman Editora, 2014.
-    + CHEN, C. T., “Digital Signal Processing – Spectral computation and filter design”, Oxford University Press, 2001.
-    + PROAKIS J. G., MANOLAKIS D. G., “Digital signal processing - principles, algorithms and applications”, Prentice Hall, 1996.
-    + SCHILLING, Robert J.; HARRIS, Sandra L. Digital signal processing using MATLAB. Cengage Learning, 2016.
+    #for item in bibliography.at("main") [
+      + #item
+    ]
 
     #v(2em)
   ],
   complementary-bibliography: [
-    + ALKIN, O., “Digital Signal Processing: A Laboratory Approach Using DSP”, Prentice Hall, 1994.
-    + HU, G. S. Introduction to digital signal processing. Beijing: Tsinghua University Press, 2005.
-    + TAN, Lizhe; JIANG, Jean. Digital signal processing: fundamentals and applications. Academic Press, 2018.
-    + KARL, John H. An introduction to digital signal processing. Elsevier, 2012.
-    + FRERKING, Marvin. Digital signal processing in communications systems. Springer Science & Business Media, 2013.
-    + OPPENHEIM, A. V., SCHAFER, R. W., “Discrete-Time Signal Processing”, Prentice Hall, 1999.
+    #for item in bibliography.at("complementary") [
+      + #item
+    ]
   ],
 )
 

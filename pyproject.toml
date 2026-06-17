@@ -1,0 +1,37 @@
+[project]
+name = "pds-aulas-site"
+version = "0.1.0"
+description = "Site para as aulas de PDS"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "mkdocs-macros-plugin>=1.3.7",
+  "mkdocs>=1.6.1",
+  "mkdocs-material>=9.6.16",
+  "pymdown-extensions>=10.16",
+  "touying>=0.7.0",
+]
+
+[dependency-groups]
+dev = [
+  "poethepoet>=0.32.0",
+]
+# Opcional (não instalado por padrão): para rodar os notebooks de figuras.
+#   uv run --group figures jupyter lab
+figures = [
+  "numpy>=2.0",
+  "matplotlib>=3.9",
+  "scipy>=1.13",
+  "jupyterlab>=4.0",
+  "ipykernel>=6.29",
+  "ipywidgets>=8.1",
+]
+
+[tool.uv]
+package = false
+
+[tool.poe.tasks]
+sync = "uv sync"
+serve = "mkdocs serve"
+build = "mkdocs build"
+deploy = "mkdocs gh-deploy --force"

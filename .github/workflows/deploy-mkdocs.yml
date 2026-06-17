@@ -1,0 +1,60 @@
+name: Deploy MkDocs
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Setup uv
+        uses: astral-sh/setup-uv@v3
+
+      - name: Instalar pacotes locais do Typst (@local/*)
+        run: |
+          set -euo pipefail
+          LOCAL_DIR="$HOME/.local/share/typst/packages/local"
+          mkdir -p "$LOCAL_DIR"
+          pkgs=$(grep -rhoE '@local/[A-Za-z0-9_-]+' --include='*.typ' . | sed 's#@local/##' | sort -u || true)
+          for pkg in $pkgs; do
+            echo "Instalando pacote local: $pkg"
+            git clone --depth 1 "https://github.com/lucaslrodri/$pkg.git" "$LOCAL_DIR/$pkg"
+          done
+
+      - name: Configurar Fontist
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+
+      - name: Setup Fontist
+        uses: fontist/setup-fontist@v2
+
+      - name: Instalar fontes
+        run: |
+          for formula in "New Computer Modern" "Libertinus" "Carlito" "TeX"; do
+            fontist install --formula "$formula"
+          done
+
+      - name: Instalar Typst
+        uses: typst-community/setup-typst@v5
+        with:
+          typst-version: 0.14.2
+
+      - name: Instalar dependências Python
+        run: uv sync
+
+      - name: Deploy para gh-pages
+        run: uv run mkdocs gh-deploy --force
