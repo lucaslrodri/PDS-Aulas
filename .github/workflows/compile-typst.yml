@@ -1,0 +1,123 @@
+name: Compilar Typst
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "**.typ"
+      - ".github/workflows/compile-typst.yml"
+
+# Permite que o workflow faça commit dos PDFs gerados de volta no repositório.
+permissions:
+  contents: write
+
+# Evita que duas execuções tentem dar push ao mesmo tempo.
+concurrency:
+  group: compilar-typst-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  compilar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Os arquivos usam pacotes @local/* (ex.: touying-ufac, ufac-syllabus)
+      # que não existem no runner. Detectamos automaticamente cada @local/<pkg>
+      # nos .typ e clonamos de github.com/lucaslrodri/<pkg> para o diretório de
+      # pacotes locais do Typst. A estrutura desses repos (0.0.1/, 0.0.2/, ...)
+      # já segue o layout esperado em local/<nome>/<versão>/.
+      - name: Instalar pacotes locais (@local/*)
+        run: |
+          set -euo pipefail
+          LOCAL_DIR="$HOME/.local/share/typst/packages/local"
+          mkdir -p "$LOCAL_DIR"
+          pkgs=$(grep -rhoE '@local/[A-Za-z0-9_-]+' --include='*.typ' . \
+                 | sed 's#@local/##' | sort -u)
+          if [ -z "$pkgs" ]; then
+            echo "Nenhum pacote @local referenciado."
+          fi
+          for pkg in $pkgs; do
+            echo "Instalando pacote local: $pkg"
+            git clone --depth 1 "https://github.com/lucaslrodri/$pkg.git" \
+              "$LOCAL_DIR/$pkg"
+          done
+
+      # O Typst 0.14 só embute New Computer Modern (serif), NCM Math,
+      # Libertinus Serif e DejaVu Sans Mono. Os temas usam outras famílias que
+      # NÃO são embutidas e precisam vir do Fontist (recomendado pela doc do
+      # setup-typst). Instalamos por --formula, que traz todas as variantes e
+      # evita os sufixos de tamanho do family_name (ex.: NewComputerModernSans10):
+      #   - New Computer Modern -> "New Computer Modern Sans"   (touying-ufac)
+      #   - Libertinus          -> "Libertinus Sans"/"Libertinus Math"
+      #   - Carlito             -> fallback do tema
+      #   - TeX                 -> "TeX Gyre Heros"             (ufac-syllabus)
+      # Validado localmente (--ignore-system-fonts + só este conjunto): os PDFs
+      # compilam sem nenhum aviso de fonte e ficam idênticos aos gerados no Mac.
+      # O setup-fontist exige Ruby já presente. No ubuntu-latest do GitHub ele
+      # vem pré-instalado, mas garantimos uma versão fixa (e necessário para
+      # rodar localmente via `act`, cuja imagem base não traz Ruby).
+      - name: Configurar Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "3.3"
+
+      - name: Configurar Fontist
+        uses: fontist/setup-fontist@v2
+
+      - name: Instalar fontes (Fontist)
+        run: |
+          for formula in "New Computer Modern" "Libertinus" "Carlito" "TeX"; do
+            echo "::group::fontist install --formula \"$formula\""
+            fontist install --formula "$formula"
+            echo "::endgroup::"
+          done
+
+      - name: Instalar Typst
+        uses: typst-community/setup-typst@v5
+        with:
+          typst-version: 0.14.2
+
+      # Compila apenas arquivos .typ cujo nome (sem extensão) é igual ao da
+      # pasta que os contém. Ex.: pds-parte-1/pds-parte-1.typ -> compila.
+      - name: Compilar arquivos .typ com o mesmo nome da pasta
+        run: |
+          set -euo pipefail
+          encontrou=0
+          while IFS= read -r -d '' f; do
+            dir=$(basename "$(dirname "$f")")
+            base=$(basename "$f" .typ)
+            if [ "$dir" = "$base" ]; then
+              echo "::group::Compilando $f"
+              typst compile --font-path "$HOME/.fontist/fonts" "$f"
+              echo "::endgroup::"
+              encontrou=1
+            else
+              echo "Ignorando (nome != pasta): $f"
+            fi
+          done < <(find . -path ./.git -prune -o -name '*.typ' -print0)
+          if [ "$encontrou" -eq 0 ]; then
+            echo "Nenhum arquivo .typ com nome igual ao da pasta foi encontrado."
+          fi
+
+      # Faz commit/push dos PDFs apenas se algo mudou. O [skip ci] e o filtro
+      # de paths em **.typ garantem que este commit (só .pdf) não dispare o
+      # workflow novamente. A checagem de $ACT (feita no shell, não em
+      # `if: env.ACT`) pula o push quando rodando localmente via `act` — que
+      # define ACT=true — sem disparar o lint da extensão GitHub Actions.
+      - name: Commit dos PDFs gerados
+        run: |
+          if [ -n "${ACT:-}" ]; then
+            echo "Execução local via act — pulando commit/push."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add '*.pdf'
+          if git diff --cached --quiet; then
+            echo "Nenhum PDF alterado."
+          else
+            git commit -m "Compila PDFs do Typst [skip ci]"
+            git push
+          fi
