@@ -1,4 +1,16 @@
-.claude
+# IA / assistentes de código
+.claude/
+CLAUDE.md
+AGENTS.md
+GEMINI.md
+.cursorrules
+.cursor/
+.aider*
+.windsurf*
+.codeium/
+.copilot/
+*.mcp.json
+
 desktop.ini
 .DS_Store
 tinymist.lock

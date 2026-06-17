@@ -90,7 +90,7 @@ jobs:
             base=$(basename "$f" .typ)
             if [ "$dir" = "$base" ]; then
               echo "::group::Compilando $f"
-              typst compile --font-path "$HOME/.fontist/fonts" "$f"
+              typst compile --root . --font-path "$HOME/.fontist/fonts" "$f"
               echo "::endgroup::"
               encontrou=1
             else
