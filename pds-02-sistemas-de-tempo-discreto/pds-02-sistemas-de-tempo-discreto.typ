@@ -112,14 +112,17 @@ Sua implementação computacional é facilitada, pois utiliza apenas três opera
   #let u-fn(n) = if n >= 0 { 1 } else { 0 }
   #let y-fn(n) = (u-fn(n) + u-fn(n - 1) + u-fn(n - 2)) / 3
   #let ns = range(-3, 8)
-  #figure(lq.diagram(
-    xlabel: [$n$],
-    ylabel: [$y[n]$],
-    xlim: (-3.5, 7.5),
-    ylim: (-0.2, 1.3),
-    height: 6cm,
-    lq.stem(ns, ns.map(y-fn), base-stroke: black),
-  ), caption: [Resposta ao degrau $u[n]$: a transição é suavizada.])
+  #figure(
+    lq.diagram(
+      xlabel: [$n$],
+      ylabel: [$y[n]$],
+      xlim: (-3.5, 7.5),
+      ylim: (-0.2, 1.3),
+      height: 6cm,
+      lq.stem(ns, ns.map(y-fn), base-stroke: black),
+    ),
+    caption: [Resposta ao degrau $u[n]$: a transição é suavizada.],
+  )
 ]
 
 == Exemplo: acumulador e diferença
@@ -228,9 +231,9 @@ Ou, de forma compacta:
   $
     H{x_1 [n] + x_2 [n]} & = 1/3 [(x_1 [n] + x_2 [n]) + (x_1 [n-1] + x_2 [n-1]) \
                        + & (x_1 [n-2] + x_2 [n-2])] \
-                       & = 1/3 (x_1 [n] + x_1 [n-1] + x_1 [n-2]) \
+                         & = 1/3 (x_1 [n] + x_1 [n-1] + x_1 [n-2]) \
                        + & 1/3 (x_2 [n] + x_2 [n-1] + x_2 [n-2]) \
-                       & = H{x_1 [n]} + H{x_2 [n]}
+                         & = H{x_1 [n]} + H{x_2 [n]}
   $
 
   Portanto, o sistema de médias móveis é *linear*.
@@ -250,7 +253,7 @@ Ou, de forma compacta:
   / Superposição:
   $
     H{x_1 [n] + x_2 [n]} & = (x_1 [n] + x_2 [n]) - (x_1 [n-1] + x_2 [n-1]) \
-                       & = (x_1 [n] - x_1 [n-1]) + (x_2 [n] - x_2 [n-1]) = H{x_1 [n]} + H{x_2 [n]}
+                         & = (x_1 [n] - x_1 [n-1]) + (x_2 [n] - x_2 [n-1]) = H{x_1 [n]} + H{x_2 [n]}
   $
 
   Logo, o sistema é *linear*.
@@ -287,22 +290,26 @@ Também chamada de *invariância ao deslocamento*.
   Como $H{x[n-k]} != y[n-k]$, o sistema *não é invariante no tempo*.
 ]
 
-#example-slide(source: [Compressor / reamostrador])[
+#exercise-slide(source: [Compressor / reamostrador])[
   Verifique se o sistema $y[n] = H{x[n]} = x[M n]$, com $M in bb(Z)$, é invariante no tempo.
 
-  === Solução
+  === Resposta
 
-  / Saída deslocada:
-  $
-    y[n - k] = x[M(n - k)] = x[M n - M k]
-  $
+  Sistema é variante no tempo.
 
-  / Transformação da entrada deslocada:
-  $
-    H{x[n - k]} = x[M n - k]
-  $
+  // === Solução
 
-  Como $x[M n - M k] != x[M n - k]$, a condição não é satisfeita: o sistema é *variante no tempo*.
+  // / Saída deslocada:
+  // $
+  //   y[n - k] = x[M(n - k)] = x[M n - M k]
+  // $
+
+  // / Transformação da entrada deslocada:
+  // $
+  //   H{x[n - k]} = x[M n - k]
+  // $
+
+  // Como $x[M n - M k] != x[M n - k]$, a condição não é satisfeita: o sistema é *variante no tempo*.
 ]
 
 == Memória
@@ -337,7 +344,9 @@ Também chamada de *invariância ao deslocamento*.
   ]
 ]
 
-#quote-box(color: colors.primary)[Sistemas que operam em *tempo real* precisam ser causais: não há acesso a amostras futuras.]
+#quote-box(
+  color: colors.primary,
+)[Sistemas que operam em *tempo real* precisam ser causais: não há acesso a amostras futuras.]
 
 == Realimentação
 
@@ -413,7 +422,9 @@ Um sistema é *SLIT* (em inglês, _LTI_) quando é, ao mesmo tempo, *linear* e *
   - Base de inúmeras técnicas práticas (incluindo *filtros digitais*).
 ]
 
-#quote-box(color: colors.danger)[Sistemas SLIT não resolvem todos os problemas; algumas aplicações exigem *sistemas não lineares*.]
+#quote-box(
+  color: colors.danger,
+)[Sistemas SLIT não resolvem todos os problemas; algumas aplicações exigem *sistemas não lineares*.]
 
 == Resposta ao impulso
 
@@ -489,10 +500,10 @@ Cada amostra de saída é a soma do produto, amostra a amostra, entre a entrada 
   Calculando amostra a amostra $y[n] = sum_k x[k] h[n - k]$:
 
   $
-    y[0] &= x[0] h[0] = 2 \
-    y[1] &= x[0] h[1] + x[1] h[0] = 2(-1) + 1(1) = -1 \
-    y[2] &= x[1] h[1] + x[2] h[0] = 1(-1) + (-1)(1) = -2 \
-    y[3] &= x[2] h[1] = (-1)(-1) = 1
+    y[0] & = x[0] h[0] = 2 \
+    y[1] & = x[0] h[1] + x[1] h[0] = 2(-1) + 1(1) = -1 \
+    y[2] & = x[1] h[1] + x[2] h[0] = 1(-1) + (-1)(1) = -2 \
+    y[3] & = x[2] h[1] = (-1)(-1) = 1
   $
 
   #pagebreak()
@@ -506,24 +517,30 @@ Cada amostra de saída é a soma do produto, amostra a amostra, entre a entrada 
   #side-by-side(height: auto)[
     #figure(lq.diagram(
       title: [$x[n]$],
-      xlabel: [$n$], ylabel: [],
-      xlim: (-1.5, 4.5), ylim: (-2.5, 2.5),
+      xlabel: [$n$],
+      ylabel: [],
+      xlim: (-1.5, 4.5),
+      ylim: (-2.5, 2.5),
       height: 4cm,
       lq.stem(xs.map(p => p.at(0)), xs.map(p => p.at(1)), base-stroke: black),
     ))
   ][
     #figure(lq.diagram(
       title: [$h[n]$],
-      xlabel: [$n$], ylabel: [],
-      xlim: (-1.5, 4.5), ylim: (-2.5, 2.5),
+      xlabel: [$n$],
+      ylabel: [],
+      xlim: (-1.5, 4.5),
+      ylim: (-2.5, 2.5),
       height: 4cm,
       lq.stem(hs.map(p => p.at(0)), hs.map(p => p.at(1)), base-stroke: black),
     ))
   ][
     #figure(lq.diagram(
       title: [$y[n] = x[n] * h[n]$],
-      xlabel: [$n$], ylabel: [],
-      xlim: (-1.5, 4.5), ylim: (-2.5, 2.5),
+      xlabel: [$n$],
+      ylabel: [],
+      xlim: (-1.5, 4.5),
+      ylim: (-2.5, 2.5),
       height: 4cm,
       lq.stem(ys.map(p => p.at(0)), ys.map(p => p.at(1)), base-stroke: black),
     ))
@@ -581,8 +598,10 @@ Filtros lineares atuam sobre as *frequências* do sinal:
     #let h-fn(n) = if n == 0 { 0.25 } else { calc.sin(calc.pi / 4 * n) / (calc.pi * n) }
     #let ns = range(-12, 13)
     #figure(lq.diagram(
-      xlabel: [$n$], ylabel: [$h[n]$],
-      xlim: (-12.5, 12.5), ylim: (-0.1, 0.3),
+      xlabel: [$n$],
+      ylabel: [$h[n]$],
+      xlim: (-12.5, 12.5),
+      ylim: (-0.1, 0.3),
       height: 5.5cm,
       lq.stem(ns, ns.map(h-fn), base-stroke: black),
     ))
