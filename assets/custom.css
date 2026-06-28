@@ -1,0 +1,557 @@
+/* === Demonstração interativa de convolução (image kernels) === */
+/* Uma única grid de 5 colunas para as duas linhas: a coluna da imagem de
+   entrada fica alinhada com P_X, o kernel com P_Y e a saída com P_{X+Y}.
+   As linhas usam display:contents para participar dessa mesma grid. */
+.ik-demo {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  justify-items: center;
+  align-items: center;
+  column-gap: 0.6rem;
+  row-gap: 0.3rem;
+  width: max-content;
+  max-width: 100%;
+  margin: 0.4rem auto 1.2rem;
+}
+
+.ik-top,
+.ik-bot {
+  display: contents;
+}
+
+.ik-op {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  line-height: 1;
+}
+
+.ik-divider {
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 1px;
+  background: #e3e3e3;
+  margin: 0.4rem 0;
+}
+
+.ik-stage {
+  position: relative;
+  overflow: hidden;
+  line-height: 0;
+  border-radius: 4px;
+}
+
+.ik-canvas {
+  display: block;
+  width: 200px;
+  height: auto;
+  background: #fff;
+}
+
+.ik-in {
+  cursor: crosshair;
+}
+
+.ik-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 2px solid #e8553a;
+  box-sizing: border-box;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.ik-ready .ik-box {
+  opacity: 1;
+}
+
+/* kernel ~80% da altura das imagens */
+.ik-mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ik-terms {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+}
+
+.ik-term {
+  text-align: center;
+}
+
+.ik-cell {
+  width: 40px;
+  height: 27px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 0.84rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.ik-w {
+  display: block;
+  margin-top: 0;
+  font-size: 0.6rem;
+  color: #999;
+  font-variant-numeric: tabular-nums;
+}
+
+.ik-sum {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.ik-eq2 {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.ik-result {
+  min-width: 52px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  border: 1px solid #0000000f;
+  font-weight: 700;
+  font-size: 0.98rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* histogramas */
+.ik-hist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ik-hist svg {
+  height: 100px;
+  width: auto;
+}
+
+.ik-hlabel {
+  margin-top: 4px;
+  font-size: 1.1rem;
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* Mobile/tablet: sem histogramas (poupa espaço) e tudo menor */
+@media (max-width: 760px) {
+  .ik-bot,
+  .ik-divider {
+    display: none;
+  }
+  .ik-canvas {
+    width: 150px;
+  }
+  .ik-op {
+    font-size: 1.5rem;
+  }
+  .ik-cell {
+    width: 34px;
+    height: 24px;
+    font-size: 0.76rem;
+  }
+  .ik-w {
+    font-size: 0.56rem;
+  }
+  .ik-result {
+    min-width: 46px;
+    height: 28px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Quando os 3 elementos não cabem lado a lado, empilha na vertical */
+@media (max-width: 520px) {
+  .ik-demo {
+    grid-template-columns: 1fr;
+    width: 100%;
+    row-gap: 0.4rem;
+  }
+  .ik-canvas {
+    width: 56vw;
+    max-width: 230px;
+  }
+}
+
+/* Tooltip info icon next to title */
+.tooltip-info {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  vertical-align: baseline;
+  margin-left: 0em;
+  line-height: 1;
+  font-size: 0.9em;
+  color: #999;
+  cursor: help;
+  position: relative;
+  top: 0.1em;
+}
+
+.tooltip-info svg,
+.tooltip-info img {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+}
+
+.tooltip-info:hover {
+  color: #666;
+}
+
+.tooltip-info::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.85);
+  color: white;
+  padding: 0.5em 0.75em;
+  border-radius: 0.3em;
+  font-size: 0.9em;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.tooltip-info::before {
+  content: "";
+  position: absolute;
+  bottom: 120%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.85);
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.tooltip-info:hover::after,
+.tooltip-info:hover::before {
+  opacity: 1;
+}
+
+/* Icon action cards grid */
+.icon-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 0.4rem;
+  margin-bottom: 0.4rem;
+  flex-wrap: nowrap;
+}
+
+.icon-actions p {
+  margin: 0;
+  display: inline-block;
+}
+
+/* Individual icon card */
+.icon-card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #424242;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  position: relative;
+  border: 1px solid #e0e0e0;
+}
+
+.icon-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.icon-card svg {
+  width: 36px;
+  height: 36px;
+  display: block;
+  color: #424242;
+  transition: color 0.2s ease;
+}
+
+.icon-card:hover svg {
+  color: #2979f0;
+}
+
+/* Outlined style for presentation button */
+.icon-card.icon-outlined {
+  background-color: #2979f0;
+  border: 2px solid #2979f0;
+  color: #ffffff;
+}
+
+.icon-card.icon-outlined:hover {
+  background-color: #424242;
+  border-color: #424242;
+  box-shadow: 0 6px 16px rgba(66, 66, 66, 0.3);
+}
+
+.icon-card.icon-outlined svg {
+  color: #ffffff;
+}
+
+/* Tooltip - Material Design style */
+.icon-card::after {
+  content: attr(aria-label);
+  position: absolute;
+  bottom: -2.5em;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.87);
+  color: #ffffff;
+  padding: 0.375em 0.75em;
+  border-radius: 2px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s cubic-bezier(0.4, 0, 0.6, 1);
+  font-family: var(--md-typeset-font-family, Roboto);
+  font-weight: 500;
+  letter-spacing: 0.4px;
+}
+
+.icon-card:hover::after {
+  opacity: 1;
+}
+
+/* Plan buttons styled like action cards */
+.button-grid {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 0.8rem 0 1rem;
+}
+
+.button-grid .md-button.card-action,
+.button-grid .md-button.card-action.card-action-download {
+  margin: 0;
+  min-width: 180px;
+  text-align: center;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  color: #424242 !important;
+  transition: all 0.2s ease;
+}
+
+.button-grid .md-button.card-action:hover,
+.button-grid .md-button.card-action:focus,
+.button-grid .md-button.card-action.card-action-download:hover,
+.button-grid .md-button.card-action.card-action-download:focus {
+  background-color: #2979f0;
+  border-color: #2979f0;
+  box-shadow: 0 4px 12px rgba(41, 121, 240, 0.3);
+  color: #ffffff !important;
+  transform: translateY(-2px);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .icon-actions {
+    gap: 1rem;
+  }
+
+  .icon-card {
+    width: 48px;
+    height: 48px;
+  }
+
+  .icon-card svg {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* Footer UFAC logo sizing */
+.md-footer-meta__inner {
+  padding: 0.2rem 0.2rem;
+  align-items: center;
+}
+
+.md-footer-meta__item--ufac-logo {
+  display: flex;
+  align-items: center;
+}
+
+.md-footer-meta__item--ufac-logo a {
+  display: flex;
+  align-items: center;
+}
+
+.md-footer-meta__item--ufac-logo img {
+  height: 2em;
+  width: auto;
+}
+
+/* Hide top header bar (menu/search/repo) */
+.md-header,
+.md-tabs,
+.md-search,
+.md-header__source {
+  display: none !important;
+}
+
+/* Hide side navigation and TOC columns */
+.md-sidebar,
+.md-sidebar--primary,
+.md-sidebar--secondary {
+  display: none !important;
+}
+
+/* Expand content area when sidebars are hidden */
+.md-content {
+  margin-left: 0 !important;
+}
+
+.md-content__inner > h1 {
+  text-align: center;
+  margin-bottom: 0.4em;
+}
+
+.md-content__inner > p[align="center"] {
+  margin-top: 0.2em;
+}
+
+/* Remove top gap left by hidden header */
+.md-main,
+.md-main__inner,
+.md-content,
+.md-content__inner {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Docente card — horizontal no desktop, vertical no mobile */
+.docente-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1.25rem;
+  background: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+  width: fit-content;
+  margin: 1.2rem auto 1.6rem;
+  text-align: left;
+}
+
+.docente-avatar-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #e8e8e8;
+  background: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.docente-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.docente-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.docente-label {
+  font-size: 0.68rem;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-weight: 600;
+}
+
+.docente-name {
+  font-size: 0.95rem;
+  color: #212121;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.docente-github {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
+  font-size: 0.82rem;
+  color: #555;
+  text-decoration: none;
+  padding: 0.15rem 0.4rem;
+  margin-left: -0.4rem;
+  border-radius: 6px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.docente-github:hover {
+  color: #2979f0;
+  background: #f0f4ff;
+}
+
+.docente-github svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+@media (max-width: 520px) {
+  .docente-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    gap: 0.5rem;
+  }
+
+  .docente-avatar-wrapper {
+    width: 52px;
+    height: 52px;
+  }
+
+  .docente-info {
+    align-items: center;
+  }
+
+  .docente-github {
+    margin-left: 0;
+  }
+}
